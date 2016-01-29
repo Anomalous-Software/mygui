@@ -13,7 +13,8 @@ namespace MyGUI
 {
 	ScrollViewResponsive::ScrollViewResponsive()
 		:rowColumns(12),
-		horizontalMaxSize(Gui::getInstancePtr()->scalePreserve(300))
+		horizontalMaxSize(Gui::getInstancePtr()->scalePreserve(300)),
+		padding(Gui::getInstancePtr()->scalePreserve(2), Gui::getInstancePtr()->scalePreserve(2))
 	{
 	}
 
@@ -30,6 +31,9 @@ namespace MyGUI
 
 		else if (_key == "HorizontalMaxSize")
 			horizontalMaxSize = Gui::getInstancePtr()->scalePreserve(utility::parseValue<int>(_value));
+
+		else if (_key == "Padding")
+			padding = Gui::getInstance().scalePreserve(utility::parseValue<IntSize>(_value));
 
 		else
 		{
@@ -68,7 +72,7 @@ namespace MyGUI
 				if (child != nullptr)
 				{
 					child->setCoord(0, currentY, width, child->getHeight());
-					currentY = child->getBottom();
+					currentY = child->getBottom() + padding.height;
 				}
 			}
 		}
@@ -85,7 +89,7 @@ namespace MyGUI
 					if (columnCount > rowColumns)
 					{
 						//Build previous row
-						currentY = buildRow(rowStart, i, width, currentY);
+						currentY = buildRow(rowStart, i, width, currentY) + padding.height;
 						
 						//Start defining new row
 						rowStart = i;
@@ -103,17 +107,20 @@ namespace MyGUI
 
 	int ScrollViewResponsive::buildRow(int rowStart, int rowEnd, int width, int currentY)
 	{
+		int count = rowEnd - rowStart;
+		int totalPadding = (count + 1) * padding.width;
+		int paddedWidth = width - totalPadding;
 		int lowestY = currentY;
 		//Build previous row
-		int previousWidgetRight = 0;
+		int previousWidgetRight = padding.width;
 		for (int j = rowStart; j < rowEnd; j++)
 		{
 			ContainerResponsive* rowChild = getChildAt(j)->castType<ContainerResponsive>(false);
 			if (rowChild != nullptr)
 			{
-				int itemWidth = (int)((float)rowChild->getColumnCount() / rowColumns * width);
+				int itemWidth = (int)((float)rowChild->getColumnCount() / rowColumns * paddedWidth);
 				rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
-				previousWidgetRight = rowChild->getRight();
+				previousWidgetRight = rowChild->getRight() + padding.width;
 				if (rowChild->getBottom() > lowestY)
 				{
 					lowestY = rowChild->getBottom();
