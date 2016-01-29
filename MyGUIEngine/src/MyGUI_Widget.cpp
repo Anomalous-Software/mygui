@@ -1362,7 +1362,7 @@ namespace MyGUI
 			mNumResponsiveColumns = utility::parseValue<int>(_value);
 
 		else if (_key == "ForwardMouseWheelToParent")
-			forwardMouseWheelToParent = utility::parseValue<bool>(_value);
+			setForwardMouseWheelToParent(utility::parseValue<bool>(_value));
 
 		else
 		{
