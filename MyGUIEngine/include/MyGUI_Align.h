@@ -4,8 +4,8 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#ifndef __MYGUI_ALIGN_H__
-#define __MYGUI_ALIGN_H__
+#ifndef MYGUI_ALIGN_H_
+#define MYGUI_ALIGN_H_
 
 #include "MyGUI_Prerequest.h"
 #include "MyGUI_Macros.h"
@@ -37,7 +37,11 @@ namespace MyGUI
 
 			HRelative = MYGUI_FLAG(5),
 			VRelative = MYGUI_FLAG(6),
-			Relative = HRelative | VRelative
+			Relative = HRelative | VRelative,
+
+			LeftRelative = MYGUI_FLAG(7), //Similar to HRelative, but only adjusts the location
+			TopRelative = MYGUI_FLAG(8), //Similar to VRelative, but only adjusts the location
+			PosRelative = LeftRelative | TopRelative  //Similar to Relative, but only adjusts the location
 		};
 
 		Align(Enum _value = Default) :
@@ -113,6 +117,21 @@ namespace MyGUI
 		bool isRelative() const 
 		{ 
 			return Relative == (mValue & (int)Relative); 
+		}
+
+		bool isLeftRelative() const
+		{
+			return LeftRelative == (mValue & (int)LeftRelative);
+		}
+
+		bool isTopRelative() const
+		{
+			return TopRelative == (mValue & (int)TopRelative);
+		}
+
+		bool isPosRelative() const
+		{
+			return PosRelative == (mValue & (int)PosRelative);
 		}
 
 		Align& operator |= (Align const& _other)
@@ -258,6 +277,9 @@ namespace MyGUI
 				MYGUI_REGISTER_VALUE(map_names, HRelative);
 				MYGUI_REGISTER_VALUE(map_names, VRelative);
 				MYGUI_REGISTER_VALUE(map_names, Relative);
+				MYGUI_REGISTER_VALUE(map_names, LeftRelative);
+				MYGUI_REGISTER_VALUE(map_names, TopRelative);
+				MYGUI_REGISTER_VALUE(map_names, PosRelative);
 			}
 
 			return map_names;
@@ -269,4 +291,4 @@ namespace MyGUI
 
 } // namespace MyGUI
 
-#endif // __MYGUI_ALIGN_H__
+#endif // MYGUI_ALIGN_H_

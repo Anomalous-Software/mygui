@@ -183,8 +183,12 @@
 		<Parameter key="RangePosition" value="1 int"/>
 		<Parameter key="Page" value="1 int"/>
 		<Parameter key="ViewPage" value="1 int"/>
+		<Parameter key="WheelPage" value="1 int"/>
 		<Parameter key="MoveToClick" value="Bool"/>
 		<Parameter key="VerticalAlignment" value="Bool"/>
+		<Parameter key="Repeat" value="Bool"/>
+		<Parameter key="RepeatTriggerTime" value="1 float"/>
+		<Parameter key="RepeatStepTime" value="1 float"/>
 		<TemplateData key="MinTrackSize" value="1 int"/>
 	</Widget>
 	<Widget name="ScrollView">
@@ -201,6 +205,28 @@
 		<Parameter key="CanvasAlign" value="CanvasAlign"/>
 		<Parameter key="CanvasSize" value="2 int"/>
 	</Widget>
+  <Widget name="ScrollViewResponsive">
+    <Property key="DefaultSkin" value="ScrollViewResponsive"/>
+    <Property key="Base" value="ScrollView"/>
+    <Property key="Skin" value="ScrollViewResponsive"/>
+    <Property key="Skin" value="ScrollViewResponsiveEmpty"/>
+    <Property key="Parent" value="true"/>
+    <Property key="Child" value="true"/>
+    <Parameter key="RowColumns" value="1 int"/>
+    <Parameter key="HorizontalMaxSize" value="1 int"/>
+    <Parameter key="Padding" value="2 int"/>
+  </Widget>
+  <Widget name="PanelResponsive">
+    <Property key="DefaultSkin" value="PanelResponsive"/>
+    <Property key="Base" value="Widget"/>
+    <Property key="Skin" value="PanelResponsive"/>
+    <Property key="Skin" value="PanelResponsiveEmpty"/>
+    <Property key="Parent" value="true"/>
+    <Property key="Child" value="true"/>
+    <Parameter key="RowColumns" value="1 int"/>
+    <Parameter key="HorizontalMaxSize" value="1 int"/>
+    <Parameter key="Padding" value="2 int"/>
+  </Widget>
 	<Widget name="ImageBox">
 		<Property key="DefaultSkin" value="ImageBox"/>
 		<Property key="Base" value="Widget"/>
@@ -267,6 +293,7 @@
 		<Property key="Parent" value="true"/>
 		<Property key="Child" value="true"/>
 		<Parameter key="Visible" value="Bool"/>
+		<Parameter key="Depth" value="1 int"/>
 		<Parameter key="Alpha" value="Alpha"/>
 		<Parameter key="InheritsAlpha" value="Bool"/>
 		<Parameter key="InheritsPick" value="Bool"/>
@@ -277,6 +304,8 @@
 		<Parameter key="Enabled" value="Bool"/>
 		<Parameter key="NeedToolTip" value="Bool"/>
 		<Parameter key="Pointer" value="String"/>
+    <Parameter key="NumResponsiveColumns" value="2 int"/>
+    <Parameter key="ForwardMouseWheelToParent" value="Bool"/>
 	</Widget>
 	<Widget name="Window">
 		<Property key="DefaultSkin" value="Window"/>

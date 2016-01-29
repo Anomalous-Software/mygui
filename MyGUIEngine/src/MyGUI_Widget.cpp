@@ -41,9 +41,11 @@ namespace MyGUI
 		mContainer(nullptr),
 		mAlign(Align::Default),
 		mVisible(true),
+		mDepth(0),
 		forwardMouseWheelToParent(false),
 		destructorCallback(0),
-		mDisableUpdateRelative(false)
+		mDisableUpdateRelative(false),
+		mNumResponsiveColumns(IntSize(4, 4))
 	{
 	}
 
@@ -334,7 +336,7 @@ namespace MyGUI
 			else
 			{
 				widget = WidgetManager::getInstance().createWidget(_style, _type, _skin, _coord, this, _style == WidgetStyle::Popup ? nullptr : this, _name);
-				mWidgetChild.push_back(widget);
+				addWidget(widget);
 			}
 		}
 
@@ -378,7 +380,6 @@ namespace MyGUI
 
 				return;
 			}
-
 		}
 		// мы не обрезаны и были нормальные
 		else if (!mIsMargin)
@@ -516,7 +517,7 @@ namespace MyGUI
 			if (item != nullptr)
 				return item;
 		}
-		// спрашиваем у детишек скна
+		// спрашиваем у детишек скина
 		for (VectorWidgetPtr::const_reverse_iterator widget = mWidgetChildSkin.rbegin(); widget != mWidgetChildSkin.rend(); ++widget)
 		{
 			ILayerItem* item = (*widget)->getLayerItemByPoint(_left - mCoord.left, _top - mCoord.top);
@@ -548,13 +549,22 @@ namespace MyGUI
 	{
 		MYGUI_ASSERT(mWidgetClient != this, "mWidgetClient can not be this widget");
 		if (mWidgetClient != nullptr)
-			mWidgetClient->_forcePick(_widget);
-
-		VectorWidgetPtr::iterator item = std::remove(mWidgetChild.begin(), mWidgetChild.end(), _widget);
-		if (item != mWidgetChild.end())
 		{
-			mWidgetChild.erase(item);
-			mWidgetChild.insert(mWidgetChild.begin(), _widget);
+			mWidgetClient->_forcePick(_widget);
+			return;
+		}
+
+		VectorWidgetPtr::iterator iter = std::find(mWidgetChild.begin(), mWidgetChild.end(), _widget);
+		if (iter == mWidgetChild.end())
+			return;
+
+		VectorWidgetPtr copy = mWidgetChild;
+		for (VectorWidgetPtr::iterator widget = copy.begin(); widget != copy.end(); ++widget)
+		{
+			if ((*widget) == _widget)
+				(*widget)->setDepth(-1);
+			else if ((*widget)->getDepth() == -1)
+				(*widget)->setDepth(0);
 		}
 	}
 
@@ -616,6 +626,10 @@ namespace MyGUI
 			coord.left = mCoord.left + (size.width - _oldsize.width);
 			need_move = true;
 		}
+		else if (mAlign.isLeftRelative())
+		{
+			coord.left = int((float)size.width * mRelativeCoord.left);
+		}
 		else if (mAlign.isHCenter())
 		{
 			// выравнивание по горизонтали без растяжения
@@ -640,6 +654,10 @@ namespace MyGUI
 			coord.top = mCoord.top + (size.height - _oldsize.height);
 			need_move = true;
 		}
+		else if (mAlign.isTopRelative())
+		{
+			coord.top = int((float)size.height * mRelativeCoord.top);
+		}
 		else if (mAlign.isVCenter())
 		{
 			// выравнивание по вертикали без растяжения
@@ -647,7 +665,7 @@ namespace MyGUI
 			need_move = true;
 		}
 
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 			mDisableUpdateRelative = true;
 			setCoord(coord);
@@ -672,7 +690,7 @@ namespace MyGUI
 
 	void Widget::setPosition(const IntPoint& _point)
 	{
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
@@ -776,7 +794,7 @@ namespace MyGUI
 
 	void Widget::setCoord(const IntCoord& _coord)
 	{
-		if (!mDisableUpdateRelative && (mAlign.isHRelative() || mAlign.isVRelative()))
+		if (!mDisableUpdateRelative && (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative()))
 		{
 
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
@@ -784,23 +802,35 @@ namespace MyGUI
 			if (parent_size.width)
 			{
 				mRelativeCoord.left = (float)_coord.left / (float)parent_size.width;
-				mRelativeCoord.width = (float)_coord.width / (float)parent_size.width;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = (float)_coord.width / (float)parent_size.width;
+				}
 			}
 			else
 			{
 				mRelativeCoord.left = 0;
-				mRelativeCoord.width = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = 0;
+				}
 			}
 
 			if (parent_size.height)
 			{
 				mRelativeCoord.top = (float)_coord.top / (float)parent_size.height;
-				mRelativeCoord.height = (float)_coord.height / (float)parent_size.height;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = (float)_coord.height / (float)parent_size.height;
+				}
 			}
 			else
 			{
 				mRelativeCoord.top = 0;
-				mRelativeCoord.height = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = 0;
+				}
 			}
 
 		}
@@ -852,30 +882,42 @@ namespace MyGUI
 	{
 		mAlign = _value;
 
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
 
 			if (parent_size.width)
 			{
 				mRelativeCoord.left = (float)mCoord.left / (float)parent_size.width;
-				mRelativeCoord.width = (float)mCoord.width / (float)parent_size.width;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = (float)mCoord.width / (float)parent_size.width;
+				}
 			}
 			else
 			{
 				mRelativeCoord.left = 0;
-				mRelativeCoord.width = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = 0;
+				}
 			}
 
 			if (parent_size.height)
 			{
 				mRelativeCoord.top = (float)mCoord.top / (float)parent_size.height;
-				mRelativeCoord.height = (float)mCoord.height / (float)parent_size.height;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = (float)mCoord.height / (float)parent_size.height;
+				}
 			}
 			else
 			{
 				mRelativeCoord.top = 0;
-				mRelativeCoord.height = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = 0;
+				}
 			}
 
 		}
@@ -1130,6 +1172,8 @@ namespace MyGUI
 
 		if (!value && InputManager::getInstance().getMouseFocusWidget() == this)
 			InputManager::getInstance()._resetMouseFocusWidget();
+		if (!value && InputManager::getInstance().getKeyFocusWidget() == this)
+			InputManager::getInstance().resetKeyFocusWidget();
 	}
 
 	void Widget::setEnabled(bool _value)
@@ -1190,7 +1234,7 @@ namespace MyGUI
 	{
 		VectorWidgetPtr::iterator iter = std::find(mWidgetChild.begin(), mWidgetChild.end(), _widget);
 		MYGUI_ASSERT(iter == mWidgetChild.end(), "widget already exist");
-		mWidgetChild.push_back(_widget);
+		addWidget(_widget);
 	}
 
 	void Widget::_unlinkChildWidget(Widget* _widget)
@@ -1302,6 +1346,10 @@ namespace MyGUI
 		else if (_key == "Visible")
 			setVisible(utility::parseValue<bool>(_value));
 
+		/// @wproperty{Widget, Depth, int} Child widget rendering depth.
+		else if (_key == "Depth")
+			setDepth(utility::parseValue<int>(_value));
+
 		/// @wproperty{Widget, Alpha, float} Прозрачность виджета от 0 до 1.
 		else if (_key == "Alpha")
 			setAlpha(utility::parseValue<float>(_value));
@@ -1341,6 +1389,12 @@ namespace MyGUI
 		/// @wproperty{Widget, Pointer, string} Указатель мыши для этого виджета.
 		else if (_key == "Pointer")
 			setPointer(_value);
+
+		else if (_key == "NumResponsiveColumns")
+			mNumResponsiveColumns = utility::parseValue<IntSize>(_value);
+
+		else if (_key == "ForwardMouseWheelToParent")
+			setForwardMouseWheelToParent(utility::parseValue<bool>(_value));
 
 		else
 		{
@@ -1479,6 +1533,67 @@ namespace MyGUI
 	void Widget::resizeLayerItemView(const IntSize& _oldView, const IntSize& _newView)
 	{
 		_setAlign(_oldView, _newView);
+	}
+
+	void Widget::setDepth(int _value)
+	{
+		if (mDepth == _value)
+			return;
+
+		mDepth = _value;
+
+		if (mParent != nullptr)
+		{
+			mParent->_unlinkChildWidget(this);
+			mParent->_linkChildWidget(this);
+			mParent->_updateChilds();
+		}
+	}
+
+	int Widget::getDepth() const
+	{
+		return mDepth;
+	}
+
+	void Widget::addWidget(Widget* _widget)
+	{
+		// сортировка глубины от большого к меньшему
+
+		int depth = _widget->getDepth();
+
+		for (size_t index = 0; index < mWidgetChild.size(); ++index)
+		{
+			Widget* widget = mWidgetChild[index];
+			if (widget->getDepth() < depth)
+			{
+				mWidgetChild.insert(mWidgetChild.begin() + index, _widget);
+				_updateChilds();
+				return;
+			}
+		}
+
+		mWidgetChild.push_back(_widget);
+	}
+
+	void Widget::_updateChilds()
+	{
+		for (VectorWidgetPtr::iterator widget = mWidgetChild.begin(); widget != mWidgetChild.end(); ++widget)
+		{
+			if ((*widget)->getWidgetStyle() == WidgetStyle::Child)
+			{
+				(*widget)->detachFromLayerItemNode(true);
+				removeChildItem((*widget));
+			}
+		}
+
+		for (VectorWidgetPtr::iterator widget = mWidgetChild.begin(); widget != mWidgetChild.end(); ++widget)
+		{
+			if ((*widget)->getWidgetStyle() == WidgetStyle::Child)
+			{
+				addChildItem((*widget));
+				(*widget)->_updateView();
+			}
+		}
 	}
 
 	bool Widget::onSendScrollGesture(const int& absx, const int& absy, const int& deltax, const int& deltay)

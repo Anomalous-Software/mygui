@@ -400,6 +400,12 @@ namespace MyGUI
 		return mDefaultHeight;
 	}
 
+	void ResourceTrueTypeFont::textureInvalidate(ITexture* _texture)
+	{
+		mGlyphMap.clear();
+		initialise();
+	}
+
 	std::vector<std::pair<Char, Char> > ResourceTrueTypeFont::getCodePointRanges() const
 	{
 		std::vector<std::pair<Char, Char> > result;
@@ -478,7 +484,10 @@ namespace MyGUI
 			mGlyphSpacing = mDefaultGlyphSpacing;
 
 		// If L8A8 (2 bytes per pixel) is supported, use it; otherwise, use R8G8B8A8 (4 bytes per pixel) as L8L8L8A8.
-		bool laMode = MyGUI::RenderManager::getInstance().isFormatSupported(Pixel<true>::getFormat(), TextureUsage::Static | TextureUsage::Write);
+		//bool laMode = MyGUI::RenderManager::getInstance().isFormatSupported(Pixel<true>::getFormat(), TextureUsage::Static | TextureUsage::Write);
+		
+		//Note that we are overriding the above, we were never using LA mode until opengles 3.0 and it doesn't work so just force this to false always
+		bool laMode = false;
 
 		// Select and call an appropriate initialisation method. By making this decision up front, we avoid having to branch on
 		// these variables many thousands of times inside tight nested loops later. From this point on, the various function
@@ -753,9 +762,18 @@ namespace MyGUI
 		// Create the texture and render the glyphs onto it.
 		//-------------------------------------------------------------------//
 
-		mTexture = RenderManager::getInstance().createTexture(MyGUI::utility::toString((size_t)this, "_TrueTypeFont"));
+		if (!mTexture)
+		{
+			mTexture = RenderManager::getInstance().createTexture(MyGUI::utility::toString((size_t)this, "_TrueTypeFont"));
+		}
+		else
+		{
+			mTexture->destroy();
+		}
 
+		mTexture->setInvalidateListener(nullptr);
 		mTexture->createManual(texWidth, texHeight, TextureUsage::Static | TextureUsage::Write, Pixel<LAMode>::getFormat());
+		mTexture->setInvalidateListener(this);
 
 		uint8* texBuffer = static_cast<uint8*>(mTexture->lock(TextureUsage::Write));
 
