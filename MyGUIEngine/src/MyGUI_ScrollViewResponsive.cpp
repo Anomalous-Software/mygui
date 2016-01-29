@@ -12,7 +12,8 @@
 namespace MyGUI
 {
 	ScrollViewResponsive::ScrollViewResponsive()
-		:rowSlots(12)
+		:rowColumns(12),
+		horizontalMaxSize(Gui::getInstancePtr()->scalePreserve(300))
 	{
 	}
 
@@ -24,8 +25,11 @@ namespace MyGUI
 	void ScrollViewResponsive::setPropertyOverride(const std::string& _key, const std::string& _value)
 	{
 
-		if (_key == "RowSlots")
-			rowSlots = utility::parseValue<int>(_value);
+		if (_key == "RowColumns")
+			rowColumns = utility::parseValue<int>(_value);
+
+		else if (_key == "HorizontalMaxSize")
+			horizontalMaxSize = Gui::getInstancePtr()->scalePreserve(utility::parseValue<int>(_value));
 
 		else
 		{
@@ -52,29 +56,46 @@ namespace MyGUI
 	void ScrollViewResponsive::repositionChildren()
 	{
 		int childCount = getChildCount();
-		int rowStart = 0;
 		IntCoord viewCoord = getViewCoord();
 		int width = viewCoord.width - viewCoord.left;
 		int currentY = 0;
-		int lowestY = 0;
 
-		for (int i = 0; i < childCount; ++i)
+		if (width < horizontalMaxSize) //Vertical Layout
 		{
-			ContainerResponsive* child = getChildAt(i)->castType<ContainerResponsive>(false);
-			if (child != nullptr)
+			for (int i = 0; i < childCount; ++i)
 			{
-				if (child->isBlock(width))
+				ContainerResponsive* child = getChildAt(i)->castType<ContainerResponsive>(false);
+				if (child != nullptr)
 				{
-					currentY = buildRow(rowStart, i, width, currentY);
-					//Add current inline row, the current child is that element
 					child->setCoord(0, currentY, width, child->getHeight());
 					currentY = child->getBottom();
-					rowStart = i + 1;
 				}
 			}
 		}
-		//Build any remaining row elements
-		currentY = buildRow(rowStart, childCount, width, currentY);
+		else //Horizontal Layout
+		{
+			int rowStart = 0;
+			int columnCount = 0;
+			for (int i = 0; i < childCount; ++i)
+			{
+				ContainerResponsive* child = getChildAt(i)->castType<ContainerResponsive>(false);
+				if (child != nullptr)
+				{
+					columnCount += child->getColumnCount();
+					if (columnCount > rowColumns)
+					{
+						//Build previous row
+						currentY = buildRow(rowStart, i, width, currentY);
+						
+						//Start defining new row
+						rowStart = i;
+						columnCount = child->getColumnCount();
+					}
+				}
+			}
+			//Build any remaining row elements
+			currentY = buildRow(rowStart, childCount, width, currentY);
+		}
 
 		//Set final scroll view size
 		setCanvasSize(width, currentY);
@@ -90,7 +111,7 @@ namespace MyGUI
 			ContainerResponsive* rowChild = getChildAt(j)->castType<ContainerResponsive>(false);
 			if (rowChild != nullptr)
 			{
-				int itemWidth = (int)((float)rowChild->getInlineSlotCount() / rowSlots * width);
+				int itemWidth = (int)((float)rowChild->getColumnCount() / rowColumns * width);
 				rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
 				previousWidgetRight = rowChild->getRight();
 				if (rowChild->getBottom() > lowestY)

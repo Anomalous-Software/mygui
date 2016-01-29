@@ -34,7 +34,8 @@ namespace MyGUI
 
 		int buildRow(int rowStart, int rowEnd, int width, int currentY);
 
-		int rowSlots;
+		int rowColumns;
+		int horizontalMaxSize;
 	};
 
 } // namespace MyGUI

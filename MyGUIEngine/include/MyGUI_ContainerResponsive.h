@@ -24,13 +24,10 @@ namespace MyGUI
 
 		virtual void setPropertyOverride(const std::string& _key, const std::string& _value);
 
-		bool isBlock(int rowSize);
-
-		int getInlineSlotCount();
+		int getColumnCount();
 
 	private:
-		int blockMaxSize;
-		int inlineSlots;
+		int columns;
 	};
 
 } // namespace MyGUI

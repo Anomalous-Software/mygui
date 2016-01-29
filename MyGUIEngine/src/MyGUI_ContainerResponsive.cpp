@@ -6,13 +6,11 @@
 
 #include "MyGUI_Precompiled.h"
 #include "MyGUI_ContainerResponsive.h"
-#include "MyGUI_Gui.h"
 
 namespace MyGUI
 {
 	ContainerResponsive::ContainerResponsive()
-		:blockMaxSize(Gui::getInstance().scalePreserve(200)),
-		inlineSlots(4)
+		: columns(4)
 	{
 	}
 
@@ -24,11 +22,8 @@ namespace MyGUI
 	void ContainerResponsive::setPropertyOverride(const std::string& _key, const std::string& _value)
 	{
 		
-		if (_key == "InlineSlots")
-			inlineSlots = utility::parseValue<int>(_value);
-
-		else if (_key == "BlockMaxSize")
-			blockMaxSize = Gui::getInstance().scalePreserve(utility::parseValue<int>(_value));
+		if (_key == "Columns")
+			columns = utility::parseValue<int>(_value);
 
 		else
 		{
@@ -39,14 +34,9 @@ namespace MyGUI
 		eventChangeProperty(this, _key, _value);
 	}
 
-	bool ContainerResponsive::isBlock(int rowSize)
+	int ContainerResponsive::getColumnCount()
 	{
-		return rowSize < blockMaxSize;
-	}
-
-	int ContainerResponsive::getInlineSlotCount()
-	{
-		return inlineSlots;
+		return columns;
 	}
 
 } // namespace MyGUI

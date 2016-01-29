@@ -212,7 +212,8 @@
     <Property key="Skin" value="ScrollViewResponsiveEmpty"/>
     <Property key="Parent" value="true"/>
     <Property key="Child" value="true"/>
-    <Parameter key="RowSlots" value="1 int"/>
+    <Parameter key="RowColumns" value="1 int"/>
+    <Parameter key="HorizontalMaxSize" value="1 int"/>
   </Widget>
   <Widget name="ContainerResponsive">
     <Property key="DefaultSkin" value="ContainerResponsive"/>
@@ -221,8 +222,7 @@
     <Property key="Skin" value="ContainerResponsiveEmpty"/>
     <Property key="Parent" value="true"/>
     <Property key="Child" value="true"/>
-    <Parameter key="BlockMaxSize" value="1 int"/>
-    <Parameter key="InlineSlots" value="1 int"/>
+    <Parameter key="Columns" value="1 int"/>
   </Widget>
 	<Widget name="ImageBox">
 		<Property key="DefaultSkin" value="ImageBox"/>
