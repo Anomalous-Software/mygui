@@ -79,7 +79,7 @@ namespace MyGUI
 			for (int i = 0; i < childCount; ++i)
 			{
 				Widget* child = getChildAt(i);
-				columnCount += child->getResponsiveColumnCount();
+				columnCount += child->getResponsiveColumnCount().width;
 				if (columnCount > rowColumns)
 				{
 					//Build previous row
@@ -87,7 +87,7 @@ namespace MyGUI
 						
 					//Start defining new row
 					rowStart = i;
-					columnCount = child->getResponsiveColumnCount();
+					columnCount = child->getResponsiveColumnCount().width;
 				}
 			}
 			//Build any remaining row elements
@@ -115,7 +115,7 @@ namespace MyGUI
 		for (int j = rowStart; j < rowEnd; j++)
 		{
 			Widget* rowChild = getChildAt(j);
-			int itemWidth = (int)((float)rowChild->getResponsiveColumnCount() / rowColumns * paddedWidth);
+			int itemWidth = (int)((float)rowChild->getResponsiveColumnCount().width / rowColumns * paddedWidth);
 			rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
 			previousWidgetRight = rowChild->getRight() + padding.width;
 			if (rowChild->getBottom() > lowestY)

@@ -13,7 +13,8 @@ namespace MyGUI
 	PanelResponsive::PanelResponsive()
 		:rowColumns(12),
 		horizontalMaxSize(Gui::getInstancePtr()->scalePreserve(300)),
-		padding(Gui::getInstancePtr()->scalePreserve(2), Gui::getInstancePtr()->scalePreserve(2))
+		padding(Gui::getInstancePtr()->scalePreserve(2), Gui::getInstancePtr()->scalePreserve(2)),
+		reverseChildrenVertically(true)
 	{
 	}
 
@@ -33,6 +34,9 @@ namespace MyGUI
 
 		else if (_key == "Padding")
 			padding = Gui::getInstance().scalePreserve(utility::parseValue<IntSize>(_value));
+
+		else if (_key == "ReverseChildrenVertically")
+			reverseChildrenVertically = utility::parseValue<bool>(_value);
 
 		else
 		{
@@ -71,8 +75,13 @@ namespace MyGUI
 
 			for (int i = 0; i < childCount; ++i)
 			{
-				Widget* child = getChildAt(i);
-				int itemHeight = (int)((float)child->getResponsiveColumnCount() / rowColumns * paddedHeight);
+				int idx = i;
+				if (reverseChildrenVertically)
+				{
+					idx = childCount - 1 - i;
+				}
+				Widget* child = getChildAt(idx);
+				int itemHeight = (int)((float)child->getResponsiveColumnCount().height / rowColumns * paddedHeight);
 				child->setCoord(padding.width, currentY, paddedWidth, itemHeight);
 				currentY = child->getBottom() + padding.height;
 			}
@@ -87,7 +96,7 @@ namespace MyGUI
 			for (int i = 0; i < childCount; ++i)
 			{
 				Widget* child = getChildAt(i);
-				int itemWidth = (int)((float)child->getResponsiveColumnCount() / rowColumns * paddedWidth);
+				int itemWidth = (int)((float)child->getResponsiveColumnCount().width / rowColumns * paddedWidth);
 				child->setCoord(previousWidgetRight, currentY, itemWidth, height);
 				previousWidgetRight = child->getRight() + padding.width;
 			}

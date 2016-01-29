@@ -318,7 +318,7 @@ namespace MyGUI
 		}
 
 		//The number of columns this widget takes up in responsive widgets.
-		int getResponsiveColumnCount()
+		IntSize getResponsiveColumnCount()
 		{
 			return mNumResponsiveColumns;
 		}
@@ -447,7 +447,7 @@ namespace MyGUI
 		FloatCoord mRelativeCoord;
 		bool mDisableUpdateRelative;
 
-		int mNumResponsiveColumns;
+		IntSize mNumResponsiveColumns;
 	};
 
 } // namespace MyGUI

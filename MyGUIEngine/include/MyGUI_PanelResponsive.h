@@ -35,6 +35,7 @@ namespace MyGUI
 		int rowColumns;
 		int horizontalMaxSize;
 		IntSize padding;
+		bool reverseChildrenVertically;
 	};
 
 } // namespace MyGUI

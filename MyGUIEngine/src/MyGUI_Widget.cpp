@@ -45,7 +45,7 @@ namespace MyGUI
 		forwardMouseWheelToParent(false),
 		destructorCallback(0),
 		mDisableUpdateRelative(false),
-		mNumResponsiveColumns(4)
+		mNumResponsiveColumns(IntSize(4, 4))
 	{
 	}
 
@@ -1359,7 +1359,7 @@ namespace MyGUI
 			setPointer(_value);
 
 		else if (_key == "NumResponsiveColumns")
-			mNumResponsiveColumns = utility::parseValue<int>(_value);
+			mNumResponsiveColumns = utility::parseValue<IntSize>(_value);
 
 		else if (_key == "ForwardMouseWheelToParent")
 			setForwardMouseWheelToParent(utility::parseValue<bool>(_value));
