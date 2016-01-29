@@ -32,9 +32,8 @@ namespace MyGUI
 	private:
 		void repositionChildren();
 
-		int buildRow(int rowStart, int rowEnd, int width, int currentY);
-
 		int rowColumns;
+		int horizontalMaxSize;
 		IntSize padding;
 	};
 

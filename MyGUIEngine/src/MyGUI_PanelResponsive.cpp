@@ -12,6 +12,7 @@ namespace MyGUI
 {
 	PanelResponsive::PanelResponsive()
 		:rowColumns(12),
+		horizontalMaxSize(Gui::getInstancePtr()->scalePreserve(300)),
 		padding(Gui::getInstancePtr()->scalePreserve(2), Gui::getInstancePtr()->scalePreserve(2))
 	{
 	}
@@ -26,6 +27,9 @@ namespace MyGUI
 
 		if (_key == "RowColumns")
 			rowColumns = utility::parseValue<int>(_value);
+
+		else if (_key == "HorizontalMaxSize")
+			horizontalMaxSize = Gui::getInstancePtr()->scalePreserve(utility::parseValue<int>(_value));
 
 		else if (_key == "Padding")
 			padding = Gui::getInstance().scalePreserve(utility::parseValue<IntSize>(_value));
@@ -55,49 +59,40 @@ namespace MyGUI
 	void PanelResponsive::repositionChildren()
 	{
 		int childCount = getChildCount();
-		int width = getCoord().width;
+		int width = getWidth();
 		int currentY = 0;
-		int totalPadding = (childCount + 1) * padding.width;
-		int paddedWidth = width - totalPadding;
-		int lowestY = currentY;
-		int previousWidgetRight = padding.width;
-		int height = getHeight();
 
-		//Always horizontal layout
-		int rowStart = 0;
-		int columnCount = 0;
-		for (int i = 0; i < childCount; ++i)
+		if (width < horizontalMaxSize) //Vertical Layout
 		{
-			Widget* child = getChildAt(i);
-			int itemWidth = (int)((float)child->getResponsiveColumnCount() / rowColumns * paddedWidth);
-			child->setCoord(previousWidgetRight, currentY, itemWidth, height);
-			previousWidgetRight = child->getRight() + padding.width;
-		}
-	}
+			int height = getHeight();
+			int paddedWidth = width - padding.width * 2;
+			int totalPadding = (childCount + 1) * padding.height;
+			int paddedHeight = height - totalPadding;
 
-	int PanelResponsive::buildRow(int rowStart, int rowEnd, int width, int currentY)
-	{
-		int count = rowEnd - rowStart;
-		int totalPadding = (count + 1) * padding.width;
-		int paddedWidth = width - totalPadding;
-		int lowestY = currentY;
-		//Build previous row
-		int previousWidgetRight = padding.width;
-		for (int j = rowStart; j < rowEnd; j++)
-		{
-			Widget* rowChild = getChildAt(j);
-			if (rowChild != nullptr)
+			for (int i = 0; i < childCount; ++i)
 			{
-				int itemWidth = (int)((float)rowChild->getResponsiveColumnCount() / rowColumns * paddedWidth);
-				rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
-				previousWidgetRight = rowChild->getRight() + padding.width;
-				if (rowChild->getBottom() > lowestY)
-				{
-					lowestY = rowChild->getBottom();
-				}
+				Widget* child = getChildAt(i);
+				int itemHeight = (int)((float)child->getResponsiveColumnCount() / rowColumns * paddedHeight);
+				child->setCoord(padding.width, currentY, paddedWidth, itemHeight);
+				currentY = child->getBottom() + padding.height;
 			}
 		}
-		return lowestY;
+		else //Horizontal layout
+		{
+			int totalPadding = (childCount + 1) * padding.width;
+			int paddedWidth = width - totalPadding;
+			int previousWidgetRight = padding.width;
+			int height = getHeight();
+
+			for (int i = 0; i < childCount; ++i)
+			{
+				Widget* child = getChildAt(i);
+				int itemWidth = (int)((float)child->getResponsiveColumnCount() / rowColumns * paddedWidth);
+				child->setCoord(previousWidgetRight, currentY, itemWidth, height);
+				previousWidgetRight = child->getRight() + padding.width;
+			}
+		}
+		
 	}
 
 } // namespace MyGUI
