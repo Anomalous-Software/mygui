@@ -115,15 +115,12 @@ namespace MyGUI
 		for (int j = rowStart; j < rowEnd; j++)
 		{
 			Widget* rowChild = getChildAt(j);
-			if (rowChild != nullptr)
+			int itemWidth = (int)((float)rowChild->getResponsiveColumnCount() / rowColumns * paddedWidth);
+			rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
+			previousWidgetRight = rowChild->getRight() + padding.width;
+			if (rowChild->getBottom() > lowestY)
 			{
-				int itemWidth = (int)((float)rowChild->getResponsiveColumnCount() / rowColumns * paddedWidth);
-				rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
-				previousWidgetRight = rowChild->getRight() + padding.width;
-				if (rowChild->getBottom() > lowestY)
-				{
-					lowestY = rowChild->getBottom();
-				}
+				lowestY = rowChild->getBottom();
 			}
 		}
 		return lowestY;

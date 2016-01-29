@@ -216,6 +216,16 @@
     <Parameter key="HorizontalMaxSize" value="1 int"/>
     <Parameter key="Padding" value="2 int"/>
   </Widget>
+  <Widget name="PanelResponsive">
+    <Property key="DefaultSkin" value="PanelResponsive"/>
+    <Property key="Base" value="Widget"/>
+    <Property key="Skin" value="PanelResponsive"/>
+    <Property key="Skin" value="PanelResponsiveEmpty"/>
+    <Property key="Parent" value="true"/>
+    <Property key="Child" value="true"/>
+    <Parameter key="RowColumns" value="1 int"/>
+    <Parameter key="Padding" value="2 int"/>
+  </Widget>
 	<Widget name="ImageBox">
 		<Property key="DefaultSkin" value="ImageBox"/>
 		<Property key="Base" value="Widget"/>

@@ -103,6 +103,7 @@ set (HEADER_FILES
   include/MyGUI_MultiListBox.h
   include/MyGUI_MultiListItem.h
   include/MyGUI_OverlappedLayer.h
+  include/MyGUI_PanelResponsive.h
   include/MyGUI_Platform.h
   include/MyGUI_Plugin.h
   include/MyGUI_PluginManager.h
@@ -227,6 +228,7 @@ set (SOURCE_FILES
   src/MyGUI_MultiListBox.cpp
   src/MyGUI_MultiListItem.cpp
   src/MyGUI_OverlappedLayer.cpp
+  src/MyGUI_PanelResponsive.cpp
   src/MyGUI_PluginManager.cpp
   src/MyGUI_PointerManager.cpp
   src/MyGUI_PolygonalSkin.cpp
@@ -473,6 +475,7 @@ SOURCE_GROUP("Header Files\\Widget\\Widget" FILES
   include/MyGUI_MenuItem.h
   include/MyGUI_MultiListBox.h
   include/MyGUI_MultiListItem.h
+  include/MyGUI_PanelResponsive.h
   include/MyGUI_PopupMenu.h
   include/MyGUI_ProgressBar.h
   include/MyGUI_ScrollBar.h
@@ -595,6 +598,7 @@ SOURCE_GROUP("Source Files\\Widget\\Widget" FILES
   src/MyGUI_MenuItem.cpp
   src/MyGUI_MultiListBox.cpp
   src/MyGUI_MultiListItem.cpp
+  src/MyGUI_PanelResponsive.cpp
   src/MyGUI_PopupMenu.cpp
   src/MyGUI_ProgressBar.cpp
   src/MyGUI_ScrollBar.cpp
