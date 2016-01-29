@@ -304,6 +304,7 @@
 		<Parameter key="NeedToolTip" value="Bool"/>
 		<Parameter key="Pointer" value="String"/>
     <Parameter key="NumResponsiveColumns" value="1 int"/>
+    <Parameter key="ForwardMouseWheelToParent" value="Bool"/>
 	</Widget>
 	<Widget name="Window">
 		<Property key="DefaultSkin" value="Window"/>

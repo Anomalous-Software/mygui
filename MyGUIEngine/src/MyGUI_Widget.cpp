@@ -1361,6 +1361,9 @@ namespace MyGUI
 		else if (_key == "NumResponsiveColumns")
 			mNumResponsiveColumns = utility::parseValue<int>(_value);
 
+		else if (_key == "ForwardMouseWheelToParent")
+			forwardMouseWheelToParent = utility::parseValue<bool>(_value);
+
 		else
 		{
 			MYGUI_LOG(Warning, "Widget property '" << _key << "' not found" << " [" << LayoutManager::getInstance().getCurrentLayout() << "]");
