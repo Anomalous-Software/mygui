@@ -205,6 +205,25 @@
 		<Parameter key="CanvasAlign" value="CanvasAlign"/>
 		<Parameter key="CanvasSize" value="2 int"/>
 	</Widget>
+  <Widget name="ScrollViewResponsive">
+    <Property key="DefaultSkin" value="ScrollViewResponsive"/>
+    <Property key="Base" value="ScrollView"/>
+    <Property key="Skin" value="ScrollViewResponsive"/>
+    <Property key="Skin" value="ScrollViewResponsiveEmpty"/>
+    <Property key="Parent" value="true"/>
+    <Property key="Child" value="true"/>
+    <Parameter key="RowSlots" value="1 int"/>
+  </Widget>
+  <Widget name="ContainerResponsive">
+    <Property key="DefaultSkin" value="ContainerResponsive"/>
+    <Property key="Base" value="Widget"/>
+    <Property key="Skin" value="ContainerResponsive"/>
+    <Property key="Skin" value="ContainerResponsiveEmpty"/>
+    <Property key="Parent" value="true"/>
+    <Property key="Child" value="true"/>
+    <Parameter key="BlockMaxSize" value="1 int"/>
+    <Parameter key="InlineSlots" value="1 int"/>
+  </Widget>
 	<Widget name="ImageBox">
 		<Property key="DefaultSkin" value="ImageBox"/>
 		<Property key="Base" value="Widget"/>

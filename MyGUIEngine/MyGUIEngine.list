@@ -11,13 +11,13 @@ set (HEADER_FILES
   include/MyGUI_Canvas.h
   include/MyGUI_ChildSkinInfo.h
   include/MyGUI_ClipboardManager.h
-  include/MyGUI_WindowsClipboardHandler.h
   include/MyGUI_Colour.h
   include/MyGUI_ComboBox.h
   include/MyGUI_Common.h
   include/MyGUI_CommonStateInfo.h
   include/MyGUI_ConsoleLogListener.h
   include/MyGUI_Constants.h
+  include/MyGUI_ContainerResponsive.h
   include/MyGUI_ControllerEdgeHide.h
   include/MyGUI_ControllerFadeAlpha.h
   include/MyGUI_ControllerItem.h
@@ -132,6 +132,7 @@ set (HEADER_FILES
   include/MyGUI_ScrollBar.h
   include/MyGUI_ScrollView.h
   include/MyGUI_ScrollViewBase.h
+  include/MyGUI_ScrollViewResponsive.h
   include/MyGUI_SharedLayer.h
   include/MyGUI_SharedLayerNode.h
   include/MyGUI_SimpleText.h
@@ -171,6 +172,7 @@ set (HEADER_FILES
   include/MyGUI_WidgetTranslate.h
   include/MyGUI_WidgetUserData.h
   include/MyGUI_Window.h
+  include/MyGUI_WindowsClipboardHandler.h
   include/MyGUI_XmlDocument.h
 )
 set (SOURCE_FILES
@@ -182,11 +184,11 @@ set (SOURCE_FILES
   src/MyGUI_Canvas.cpp
   src/MyGUI_ChildSkinInfo.cpp
   src/MyGUI_ClipboardManager.cpp
-  src/MyGUI_WindowsClipboardHandler.cpp
   src/MyGUI_Colour.cpp
   src/MyGUI_ComboBox.cpp
   src/MyGUI_ConsoleLogListener.cpp
   src/MyGUI_Constants.cpp
+  src/MyGUI_ContainerResponsive.cpp
   src/MyGUI_ControllerEdgeHide.cpp
   src/MyGUI_ControllerFadeAlpha.cpp
   src/MyGUI_ControllerManager.cpp
@@ -247,6 +249,7 @@ set (SOURCE_FILES
   src/MyGUI_ScrollBar.cpp
   src/MyGUI_ScrollView.cpp
   src/MyGUI_ScrollViewBase.cpp
+  src/MyGUI_ScrollViewResponsive.cpp
   src/MyGUI_SharedLayer.cpp
   src/MyGUI_SharedLayerNode.cpp
   src/MyGUI_SimpleText.cpp
@@ -270,6 +273,7 @@ set (SOURCE_FILES
   src/MyGUI_WidgetManager.cpp
   src/MyGUI_WidgetUserData.cpp
   src/MyGUI_Window.cpp
+  src/MyGUI_WindowsClipboardHandler.cpp
   src/MyGUI_XmlDocument.cpp
 )
 SOURCE_GROUP("Header Files" FILES
@@ -337,7 +341,6 @@ SOURCE_GROUP("Header Files\\Core\\LayerItem\\Interfaces" FILES
 )
 SOURCE_GROUP("Header Files\\Core\\Manager" FILES
   include/MyGUI_ClipboardManager.h
-  include/MyGUI_WindowsClipboardHandler.h
   include/MyGUI_ControllerManager.h
   include/MyGUI_DataManager.h
   include/MyGUI_DynLibManager.h
@@ -356,6 +359,7 @@ SOURCE_GROUP("Header Files\\Core\\Manager" FILES
   include/MyGUI_SubWidgetManager.h
   include/MyGUI_ToolTipManager.h
   include/MyGUI_WidgetManager.h
+  include/MyGUI_WindowsClipboardHandler.h
 )
 SOURCE_GROUP("Header Files\\Core\\Resource" FILES
   include/MyGUI_ResourceImageSet.h
@@ -461,6 +465,7 @@ SOURCE_GROUP("Header Files\\Widget\\Widget" FILES
   include/MyGUI_Button.h
   include/MyGUI_Canvas.h
   include/MyGUI_ComboBox.h
+  include/MyGUI_ContainerResponsive.h
   include/MyGUI_DDContainer.h
   include/MyGUI_EditBox.h
   include/MyGUI_ImageBox.h
@@ -475,6 +480,7 @@ SOURCE_GROUP("Header Files\\Widget\\Widget" FILES
   include/MyGUI_ProgressBar.h
   include/MyGUI_ScrollBar.h
   include/MyGUI_ScrollView.h
+  include/MyGUI_ScrollViewResponsive.h
   include/MyGUI_TabControl.h
   include/MyGUI_TabItem.h
   include/MyGUI_TextBox.h
@@ -510,7 +516,6 @@ SOURCE_GROUP("Source Files\\Core\\LayerItem" FILES
 )
 SOURCE_GROUP("Source Files\\Core\\Manager" FILES
   src/MyGUI_ClipboardManager.cpp
-  src/MyGUI_WindowsClipboardHandler.cpp
   src/MyGUI_ControllerManager.cpp
   src/MyGUI_DataManager.cpp
   src/MyGUI_DynLibManager.cpp
@@ -529,6 +534,7 @@ SOURCE_GROUP("Source Files\\Core\\Manager" FILES
   src/MyGUI_SubWidgetManager.cpp
   src/MyGUI_ToolTipManager.cpp
   src/MyGUI_WidgetManager.cpp
+  src/MyGUI_WindowsClipboardHandler.cpp
 )
 SOURCE_GROUP("Source Files\\Core\\Resource" FILES
   src/MyGUI_ResourceImageSet.cpp
@@ -582,6 +588,7 @@ SOURCE_GROUP("Source Files\\Widget\\Widget" FILES
   src/MyGUI_Button.cpp
   src/MyGUI_Canvas.cpp
   src/MyGUI_ComboBox.cpp
+  src/MyGUI_ContainerResponsive.cpp
   src/MyGUI_DDContainer.cpp
   src/MyGUI_EditBox.cpp
   src/MyGUI_ImageBox.cpp
@@ -596,6 +603,7 @@ SOURCE_GROUP("Source Files\\Widget\\Widget" FILES
   src/MyGUI_ProgressBar.cpp
   src/MyGUI_ScrollBar.cpp
   src/MyGUI_ScrollView.cpp
+  src/MyGUI_ScrollViewResponsive.cpp
   src/MyGUI_TabControl.cpp
   src/MyGUI_TabItem.cpp
   src/MyGUI_TextBox.cpp
