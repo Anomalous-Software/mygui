@@ -626,6 +626,10 @@ namespace MyGUI
 			coord.left = mCoord.left + (size.width - _oldsize.width);
 			need_move = true;
 		}
+		else if (mAlign.isLeftRelative())
+		{
+			coord.left = int((float)size.width * mRelativeCoord.left);
+		}
 		else if (mAlign.isHCenter())
 		{
 			// выравнивание по горизонтали без растяжения
@@ -650,6 +654,10 @@ namespace MyGUI
 			coord.top = mCoord.top + (size.height - _oldsize.height);
 			need_move = true;
 		}
+		else if (mAlign.isTopRelative())
+		{
+			coord.top = int((float)size.height * mRelativeCoord.top);
+		}
 		else if (mAlign.isVCenter())
 		{
 			// выравнивание по вертикали без растяжения
@@ -657,7 +665,7 @@ namespace MyGUI
 			need_move = true;
 		}
 
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 			mDisableUpdateRelative = true;
 			setCoord(coord);
@@ -682,7 +690,7 @@ namespace MyGUI
 
 	void Widget::setPosition(const IntPoint& _point)
 	{
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
@@ -786,7 +794,7 @@ namespace MyGUI
 
 	void Widget::setCoord(const IntCoord& _coord)
 	{
-		if (!mDisableUpdateRelative && (mAlign.isHRelative() || mAlign.isVRelative()))
+		if (!mDisableUpdateRelative && (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative()))
 		{
 
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
@@ -794,23 +802,35 @@ namespace MyGUI
 			if (parent_size.width)
 			{
 				mRelativeCoord.left = (float)_coord.left / (float)parent_size.width;
-				mRelativeCoord.width = (float)_coord.width / (float)parent_size.width;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = (float)_coord.width / (float)parent_size.width;
+				}
 			}
 			else
 			{
 				mRelativeCoord.left = 0;
-				mRelativeCoord.width = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = 0;
+				}
 			}
 
 			if (parent_size.height)
 			{
 				mRelativeCoord.top = (float)_coord.top / (float)parent_size.height;
-				mRelativeCoord.height = (float)_coord.height / (float)parent_size.height;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = (float)_coord.height / (float)parent_size.height;
+				}
 			}
 			else
 			{
 				mRelativeCoord.top = 0;
-				mRelativeCoord.height = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = 0;
+				}
 			}
 
 		}
@@ -862,30 +882,42 @@ namespace MyGUI
 	{
 		mAlign = _value;
 
-		if (mAlign.isHRelative() || mAlign.isVRelative())
+		if (mAlign.isHRelative() || mAlign.isVRelative() || mAlign.isLeftRelative() || mAlign.isTopRelative())
 		{
 			const IntSize& parent_size = mCroppedParent ? mCroppedParent->getSize() : RenderManager::getInstance().getViewSize();
 
 			if (parent_size.width)
 			{
 				mRelativeCoord.left = (float)mCoord.left / (float)parent_size.width;
-				mRelativeCoord.width = (float)mCoord.width / (float)parent_size.width;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = (float)mCoord.width / (float)parent_size.width;
+				}
 			}
 			else
 			{
 				mRelativeCoord.left = 0;
-				mRelativeCoord.width = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.width = 0;
+				}
 			}
 
 			if (parent_size.height)
 			{
 				mRelativeCoord.top = (float)mCoord.top / (float)parent_size.height;
-				mRelativeCoord.height = (float)mCoord.height / (float)parent_size.height;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = (float)mCoord.height / (float)parent_size.height;
+				}
 			}
 			else
 			{
 				mRelativeCoord.top = 0;
-				mRelativeCoord.height = 0;
+				if (mAlign.isHRelative() || mAlign.isVRelative())
+				{
+					mRelativeCoord.height = 0;
+				}
 			}
 
 		}

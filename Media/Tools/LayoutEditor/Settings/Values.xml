@@ -35,6 +35,10 @@
 		<Property key="HCenter Bottom"/>
 		<Property key="HCenter VStretch"/>
 		<Property key="HCenter VCenter"/>
+
+    <Property key="LeftRelative Top"/>
+    <Property key="Left TopRelative"/>
+    <Property key="LeftRelative TopRelative"/>
 	</Value>
 
 	<Value name="TextAlign">
