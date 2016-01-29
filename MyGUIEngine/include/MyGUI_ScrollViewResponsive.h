@@ -30,7 +30,7 @@ namespace MyGUI
 		virtual void setCoord(const IntCoord& _value);
 
 	private:
-		void repositionChildren();
+		void repositionChildren(bool allowSecondResize = true);
 
 		int buildRow(int rowStart, int rowEnd, int width, int currentY);
 

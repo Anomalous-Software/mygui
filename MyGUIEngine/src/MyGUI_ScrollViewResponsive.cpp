@@ -56,7 +56,7 @@ namespace MyGUI
 		repositionChildren();
 	}
 
-	void ScrollViewResponsive::repositionChildren()
+	void ScrollViewResponsive::repositionChildren(bool allowSecondResize)
 	{
 		int childCount = getChildCount();
 		int width = getViewCoord().width;
@@ -64,10 +64,11 @@ namespace MyGUI
 
 		if (width < horizontalMaxSize) //Vertical Layout
 		{
+			int adjustedWidth = width - (padding.width * 2);
 			for (int i = 0; i < childCount; ++i)
 			{
 				Widget* child = getChildAt(i);
-				child->setCoord(0, currentY, width, child->getHeight());
+				child->setCoord(padding.width, currentY, adjustedWidth, child->getHeight());
 				currentY = child->getBottom() + padding.height;
 			}
 		}
@@ -95,6 +96,12 @@ namespace MyGUI
 
 		//Set final scroll view size
 		setCanvasSize(width, currentY);
+
+		//Make sure our canvas is large enough, if not resize again.
+		if (allowSecondResize && width != getViewCoord().width)
+		{
+			repositionChildren(false);
+		}
 	}
 
 	int ScrollViewResponsive::buildRow(int rowStart, int rowEnd, int width, int currentY)
