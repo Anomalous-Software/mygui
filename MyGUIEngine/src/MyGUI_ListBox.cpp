@@ -11,6 +11,7 @@
 #include "MyGUI_ResourceSkin.h"
 #include "MyGUI_InputManager.h"
 #include "MyGUI_WidgetManager.h"
+#include "MyGUI_Gui.h"
 
 namespace MyGUI
 {
@@ -42,7 +43,7 @@ namespace MyGUI
 			mSkinLine = getUserString("SkinLine");
 
 		if (isUserString("HeightLine"))
-			mHeightLine = utility::parseInt(getUserString("HeightLine"));
+			mHeightLine = Gui::getInstancePtr()->scalePreserve(utility::parseInt(getUserString("HeightLine")));
 
 		if (mHeightLine < 1)
 			mHeightLine = 1;
