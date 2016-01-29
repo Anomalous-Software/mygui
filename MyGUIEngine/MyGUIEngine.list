@@ -17,7 +17,6 @@ set (HEADER_FILES
   include/MyGUI_CommonStateInfo.h
   include/MyGUI_ConsoleLogListener.h
   include/MyGUI_Constants.h
-  include/MyGUI_ContainerResponsive.h
   include/MyGUI_ControllerEdgeHide.h
   include/MyGUI_ControllerFadeAlpha.h
   include/MyGUI_ControllerItem.h
@@ -188,7 +187,6 @@ set (SOURCE_FILES
   src/MyGUI_ComboBox.cpp
   src/MyGUI_ConsoleLogListener.cpp
   src/MyGUI_Constants.cpp
-  src/MyGUI_ContainerResponsive.cpp
   src/MyGUI_ControllerEdgeHide.cpp
   src/MyGUI_ControllerFadeAlpha.cpp
   src/MyGUI_ControllerManager.cpp
@@ -465,7 +463,6 @@ SOURCE_GROUP("Header Files\\Widget\\Widget" FILES
   include/MyGUI_Button.h
   include/MyGUI_Canvas.h
   include/MyGUI_ComboBox.h
-  include/MyGUI_ContainerResponsive.h
   include/MyGUI_DDContainer.h
   include/MyGUI_EditBox.h
   include/MyGUI_ImageBox.h
@@ -588,7 +585,6 @@ SOURCE_GROUP("Source Files\\Widget\\Widget" FILES
   src/MyGUI_Button.cpp
   src/MyGUI_Canvas.cpp
   src/MyGUI_ComboBox.cpp
-  src/MyGUI_ContainerResponsive.cpp
   src/MyGUI_DDContainer.cpp
   src/MyGUI_EditBox.cpp
   src/MyGUI_ImageBox.cpp

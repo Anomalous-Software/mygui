@@ -317,6 +317,12 @@ namespace MyGUI
 			this->destructorCallback = destructorCallback;
 		}
 
+		//The number of columns this widget takes up in responsive widgets.
+		int getResponsiveColumnCount()
+		{
+			return mNumResponsiveColumns;
+		}
+
 	protected:
 		// все создание только через фабрику
 		virtual ~Widget();
@@ -440,6 +446,8 @@ namespace MyGUI
 
 		FloatCoord mRelativeCoord;
 		bool mDisableUpdateRelative;
+
+		int mNumResponsiveColumns;
 	};
 
 } // namespace MyGUI

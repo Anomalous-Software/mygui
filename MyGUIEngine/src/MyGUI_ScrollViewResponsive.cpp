@@ -5,7 +5,6 @@
  */
 
 #include "MyGUI_Precompiled.h"
-#include "MyGUI_ContainerResponsive.h"
 #include "MyGUI_ScrollViewResponsive.h"
 #include "MyGUI_Gui.h"
 
@@ -60,20 +59,16 @@ namespace MyGUI
 	void ScrollViewResponsive::repositionChildren()
 	{
 		int childCount = getChildCount();
-		IntCoord viewCoord = getViewCoord();
-		int width = viewCoord.width - viewCoord.left;
+		int width = getViewCoord().width;
 		int currentY = 0;
 
 		if (width < horizontalMaxSize) //Vertical Layout
 		{
 			for (int i = 0; i < childCount; ++i)
 			{
-				ContainerResponsive* child = getChildAt(i)->castType<ContainerResponsive>(false);
-				if (child != nullptr)
-				{
-					child->setCoord(0, currentY, width, child->getHeight());
-					currentY = child->getBottom() + padding.height;
-				}
+				Widget* child = getChildAt(i);
+				child->setCoord(0, currentY, width, child->getHeight());
+				currentY = child->getBottom() + padding.height;
 			}
 		}
 		else //Horizontal Layout
@@ -82,19 +77,16 @@ namespace MyGUI
 			int columnCount = 0;
 			for (int i = 0; i < childCount; ++i)
 			{
-				ContainerResponsive* child = getChildAt(i)->castType<ContainerResponsive>(false);
-				if (child != nullptr)
+				Widget* child = getChildAt(i);
+				columnCount += child->getResponsiveColumnCount();
+				if (columnCount > rowColumns)
 				{
-					columnCount += child->getColumnCount();
-					if (columnCount > rowColumns)
-					{
-						//Build previous row
-						currentY = buildRow(rowStart, i, width, currentY) + padding.height;
+					//Build previous row
+					currentY = buildRow(rowStart, i, width, currentY) + padding.height;
 						
-						//Start defining new row
-						rowStart = i;
-						columnCount = child->getColumnCount();
-					}
+					//Start defining new row
+					rowStart = i;
+					columnCount = child->getResponsiveColumnCount();
 				}
 			}
 			//Build any remaining row elements
@@ -115,10 +107,10 @@ namespace MyGUI
 		int previousWidgetRight = padding.width;
 		for (int j = rowStart; j < rowEnd; j++)
 		{
-			ContainerResponsive* rowChild = getChildAt(j)->castType<ContainerResponsive>(false);
+			Widget* rowChild = getChildAt(j);
 			if (rowChild != nullptr)
 			{
-				int itemWidth = (int)((float)rowChild->getColumnCount() / rowColumns * paddedWidth);
+				int itemWidth = (int)((float)rowChild->getResponsiveColumnCount() / rowColumns * paddedWidth);
 				rowChild->setCoord(previousWidgetRight, currentY, itemWidth, rowChild->getHeight());
 				previousWidgetRight = rowChild->getRight() + padding.width;
 				if (rowChild->getBottom() > lowestY)

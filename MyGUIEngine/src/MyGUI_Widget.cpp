@@ -44,7 +44,8 @@ namespace MyGUI
 		mDepth(0),
 		forwardMouseWheelToParent(false),
 		destructorCallback(0),
-		mDisableUpdateRelative(false)
+		mDisableUpdateRelative(false),
+		mNumResponsiveColumns(4)
 	{
 	}
 
@@ -1356,6 +1357,9 @@ namespace MyGUI
 		/// @wproperty{Widget, Pointer, string} Указатель мыши для этого виджета.
 		else if (_key == "Pointer")
 			setPointer(_value);
+
+		else if (_key == "NumResponsiveColumns")
+			mNumResponsiveColumns = utility::parseValue<int>(_value);
 
 		else
 		{

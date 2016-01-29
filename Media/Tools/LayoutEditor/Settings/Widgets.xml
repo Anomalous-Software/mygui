@@ -216,15 +216,6 @@
     <Parameter key="HorizontalMaxSize" value="1 int"/>
     <Parameter key="Padding" value="2 int"/>
   </Widget>
-  <Widget name="ContainerResponsive">
-    <Property key="DefaultSkin" value="ContainerResponsive"/>
-    <Property key="Base" value="Widget"/>
-    <Property key="Skin" value="ContainerResponsive"/>
-    <Property key="Skin" value="ContainerResponsiveEmpty"/>
-    <Property key="Parent" value="true"/>
-    <Property key="Child" value="true"/>
-    <Parameter key="Columns" value="1 int"/>
-  </Widget>
 	<Widget name="ImageBox">
 		<Property key="DefaultSkin" value="ImageBox"/>
 		<Property key="Base" value="Widget"/>
@@ -302,6 +293,7 @@
 		<Parameter key="Enabled" value="Bool"/>
 		<Parameter key="NeedToolTip" value="Bool"/>
 		<Parameter key="Pointer" value="String"/>
+    <Parameter key="NumResponsiveColumns" value="1 int"/>
 	</Widget>
 	<Widget name="Window">
 		<Property key="DefaultSkin" value="Window"/>
